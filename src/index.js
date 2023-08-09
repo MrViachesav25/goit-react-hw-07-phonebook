@@ -7,10 +7,7 @@ import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    {/* За допомогою persistor дані з локального сховища попадають в стейт */}
       <Provider store={store}>
         <App />
       </Provider>
-  </React.StrictMode>
 );

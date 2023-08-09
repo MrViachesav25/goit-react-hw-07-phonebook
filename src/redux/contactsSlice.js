@@ -1,25 +1,48 @@
+import { addContactThunk, deleteContactThunk, fetchContactThunk } from './thunk';
+
 const { createSlice } = require("@reduxjs/toolkit")
 
 const allContacts = {
-    contacts: [
-        { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-        { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-        { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-        { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    items: [],
+    isLoading: false,
+    error: null
+}
+
+const getPending = (state) => {
+    state.isLoading = true;
+    state.error = null;
+};
+
+const getFulfilled = (state, action) => {
+    state.isLoading = false;
+    state.items = action.payload;
+};
+
+const getRejected = (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
 }
 
 const contactsSlice = createSlice({
     name: 'contacts',
     initialState: allContacts,
-    reducers: {
-        addContactsSlice(state, action) {
-            state.contacts.push(action.payload);
-        },
-        deleteContactsSlice(state, action) {
-            state.contacts = state.contacts.filter(contact => contact.id !== action.payload)
-        },
-    },   
+    extraReducers: (builder) => builder
+    .addCase(fetchContactThunk.pending, getPending)
+    .addCase(fetchContactThunk.fulfilled, getFulfilled)
+    .addCase(fetchContactThunk.rejected, getRejected)
+    .addCase(addContactThunk.pending, getPending)
+    .addCase(addContactThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.items.unshift(action.payload);
+    })
+    .addCase(addContactThunk.rejected, getRejected)
+    .addCase(deleteContactThunk.pending, getPending)
+    .addCase(deleteContactThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const index = state.items.findIndex(item => item.id === action.payload.id);
+        state.items.splice(index, 1)
+    })
+    .addCase(deleteContactThunk.rejected, getRejected)
 });
 
 export const { addContactsSlice, deleteContactsSlice } = contactsSlice.actions;

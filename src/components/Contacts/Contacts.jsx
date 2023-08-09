@@ -7,13 +7,13 @@ import {
   Button,
 } from './Contacts.styled';
 import { useDispatch } from 'react-redux';
-import { deleteContactsSlice } from 'redux/contactsSlice';
+import { deleteContactThunk } from 'redux/thunk';
 
 const Contacts = ({ id, name, number }) => {
   const dispatch = useDispatch();
 
   const deleteContact = userId => {
-    dispatch(deleteContactsSlice(userId))
+    dispatch(deleteContactThunk(userId))
   }
   return (
     <ContactItem key={id}>

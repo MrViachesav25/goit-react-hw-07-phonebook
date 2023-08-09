@@ -1,14 +1,14 @@
 import { FilterLabel, Input } from './FilterInput.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilter } from 'redux/selectors';
-import { addFilterSlice } from 'redux/filterSlice';
+import { selectFilter } from 'redux/selectors';
+import { addFilter } from 'redux/filterSlice';
 
 const FilterInput = () => {
   const dispatch = useDispatch();
-  const { filter } = useSelector(getFilter);
+  const { filter } = useSelector(selectFilter);
   
   const onChangeFilter = event => {
-    dispatch(addFilterSlice(event.currentTarget.value.toLowerCase()))
+    dispatch(addFilter(event.currentTarget.value.toLowerCase()))
   };
   return (
     <FilterLabel>

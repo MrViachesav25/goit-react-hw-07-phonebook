@@ -4,48 +4,42 @@ import PropTypes from 'prop-types';
 import { ContainerForm, ContactLabel, ContactInputForm, Button } from './ContactForm.styled';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-import { addContactsSlice } from 'redux/contactsSlice';
-import { nanoid } from 'nanoid';
+import { addContactThunk } from 'redux/thunk';
+import { selectItems } from 'redux/selectors';
 
 export default function ContactForm() {
   
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
 
   const dispatch = useDispatch();
 
-  const { contacts } = useSelector(getContacts);
+  const contacts = useSelector(selectItems);
   
   const handleChangeName = event => {
     setName(event.currentTarget.value);
   };
   const handleChangeNumber = event => {
-    setNumber(event.currentTarget.value);
+    setPhone(event.currentTarget.value);
   };
-
-  const addContact = data => {
-    const firstContact = {...data, id: nanoid(), };
-
-    contacts.some(({name}) => name === data.name)
-    ? toast.warning(<span>We have already such `${data.name}`</span>, {
-      position: toast.POSITION.TOP_LEFT,
-      theme: "colored",
-    }) 
-    : dispatch(addContactsSlice(firstContact))
-  }
 
   const handleSubmit = event => {
     event.preventDefault();
-    addContact({name, number});
+    contacts.some(contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim() 
+    || contact.phone.toLowerCase().trim() === phone.toLowerCase().trim())
+    ? toast.warning(`${name} is already in contacts`, {
+      position: toast.POSITION.TOP_LEFT,
+      theme: "colored",
+    }) 
+    : dispatch(addContactThunk({name, phone}));
     formReset();
   };
 
   const formReset = () => {
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
@@ -66,7 +60,7 @@ export default function ContactForm() {
             onChange={handleChangeNumber}
             type="tel"
             name="number"
-            value={number}
+            value={phone}
             pattern="\+?\d{1,4}?[\-.\s]?\(?\d{1,3}?\)?[\-.\s]?\d{1,4}[\-.\s]?\d{1,4}[\-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
