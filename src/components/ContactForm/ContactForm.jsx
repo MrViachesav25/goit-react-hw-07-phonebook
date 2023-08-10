@@ -1,6 +1,3 @@
-
-import PropTypes from 'prop-types';
-
 import { ContainerForm, ContactLabel, ContactInputForm, Button } from './ContactForm.styled';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,6 +24,7 @@ export default function ContactForm() {
 
   const handleSubmit = event => {
     event.preventDefault();
+    
     contacts.some(contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim() 
     || contact.phone.toLowerCase().trim() === phone.toLowerCase().trim())
     ? toast.warning(`${name} is already in contacts`, {
@@ -70,8 +68,4 @@ export default function ContactForm() {
         <ToastContainer/>
       </ContainerForm>
   );
-}
-
-ContactForm.propTypes = {
-  addContact: PropTypes.func,
 }

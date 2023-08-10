@@ -9,7 +9,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { deleteContactThunk } from 'redux/thunk';
 
-const Contacts = ({ id, name, number }) => {
+const Contacts = ({ id, name, phone }) => {
   const dispatch = useDispatch();
 
   const deleteContact = userId => {
@@ -18,7 +18,7 @@ const Contacts = ({ id, name, number }) => {
   return (
     <ContactItem key={id}>
       <ContactName>
-        {name}:<ContactNumber>{number}</ContactNumber>
+        {name}:<ContactNumber>{phone}</ContactNumber>
       </ContactName>
       <Button onClick={() => deleteContact(id)}>Delete</Button>
     </ContactItem>
@@ -28,7 +28,7 @@ const Contacts = ({ id, name, number }) => {
 Contacts.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired,
 };
 
 export default Contacts;

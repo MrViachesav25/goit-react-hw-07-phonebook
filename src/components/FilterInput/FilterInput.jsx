@@ -5,7 +5,7 @@ import { addFilter } from 'redux/filterSlice';
 
 const FilterInput = () => {
   const dispatch = useDispatch();
-  const { filter } = useSelector(selectFilter);
+  const filter = useSelector(selectFilter);
   
   const onChangeFilter = event => {
     dispatch(addFilter(event.currentTarget.value.toLowerCase()))
